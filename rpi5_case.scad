@@ -1,9 +1,9 @@
 rsp5_x = 56;
-rsp5_usb_1_pos = 47;
-rsp5_usb_2_pos = 29;
-rsp5_eth_pos = 10.25;
+rsp5_usb_2_0_pos = 47;
+rsp5_usb_3_0_pos = 29.1;
+rsp5_eth_pos = 10.2;
 
-base_x = 85;
+base_x = 88;
 base_y = 44;
 base_z = 2;
 
@@ -21,16 +21,20 @@ hole_height = 8;
 difference() {
     difference() {
         difference() {
+            // base
             cube([base_x,base_y,base_z], false);
-            color("aqua")
-            translate([rsp5_usb_1_pos - (usb_y / 2) + base_board_margin, hole_height, -1])
+            // USB 2.0
+            color("black")
+            translate([rsp5_usb_2_0_pos - (usb_y / 2) + base_board_margin, hole_height, -1])
             cube([usb_x,usb_y, 10], false);
         };
-        color("aqua")
-        translate([rsp5_usb_2_pos - (usb_y / 2) + base_board_margin, hole_height, -1])
+        // USB 3.0
+        color("lightblue")
+        translate([rsp5_usb_3_0_pos - (usb_y / 2) + base_board_margin, hole_height, -1])
         cube([usb_x,usb_y, 10], false);
     }
-    color("aqua")
+    // Ethernet
+    color("red")
     translate([rsp5_eth_pos - (eth_y / 2) + base_board_margin, hole_height, -1])
     cube([eth_x,eth_y, 10], false);
 }
