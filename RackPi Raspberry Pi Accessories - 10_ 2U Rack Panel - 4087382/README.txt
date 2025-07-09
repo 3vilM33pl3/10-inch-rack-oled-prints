@@ -1,1 +1,0 @@
-RackPi Raspberry Pi Accessories - 10" 2U Rack Panel by nurbspline on Thingiverse: https://www.thingiverse.com/thing:4087382

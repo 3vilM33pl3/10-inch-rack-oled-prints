@@ -1,1 +1,0 @@
-RackPi Raspberry Pi (2B / 3B / 3B+ / 4B) Rack Shield 19" 2U with OLED & Power Switch by SliderBOR on Thingiverse: https://www.thingiverse.com/thing:3022136
