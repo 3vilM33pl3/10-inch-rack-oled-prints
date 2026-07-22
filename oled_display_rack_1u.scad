@@ -7,9 +7,8 @@
 // in the top wall of each pocket.
 //
 // Model orientation = print orientation: front face on the bed (Z = 0),
-// pocket walls and flanges grow upward. The panel is 254mm wide and the MK3
-// bed is 250mm, so rotate the part ~40 degrees around Z in the slicer to fit
-// diagonally. No supports needed. PETG or PLA, 4 perimeters.
+// pocket walls and flanges grow upward. The panel is 250mm wide so it fits
+// the MK3 bed without rotating. No supports needed. PETG or PLA, 4 perimeters.
 //
 // Before printing the full panel: verify every MEASURE ME value with calipers
 // against the actual modules and rack rails, then set render_mode = "coupon"
@@ -21,7 +20,7 @@ cyl_fn = 254;        // resolution for holes
 boolean_height = 20; // oversize height for through-cutters
 
 // faceplate
-panel_x = 254;  // 10 inch rack faceplate width
+panel_x = 250;  // 10 inch rack faceplate, narrowed from 254 to fit the MK3 bed (holes stay centered)
 panel_y = 43.6; // 1U = 44.45 minus fitting clearance
 panel_z = 3;    // faceplate thickness
 
