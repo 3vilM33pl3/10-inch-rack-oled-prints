@@ -1,7 +1,7 @@
 rsp5_x = 56;
-rsp5_usb_2_0_pos = 47;
-rsp5_usb_3_0_pos = 29.1;
-rsp5_eth_pos = 10.2;
+rsp5_usb_2_0_pos = 47.5;
+rsp5_usb_3_0_pos = 29.6;
+rsp5_eth_pos = 10;
 
 boolean_height = 10;
 boolean_offset = -1;
