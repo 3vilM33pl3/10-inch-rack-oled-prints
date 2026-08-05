@@ -35,13 +35,18 @@ module shell(size, r, wall, floor) {
 
 // PCB locating standoff: a post of dia boss_d and height h with a central pilot
 // (pilot_d) through it and the part beneath. Used under the Pi mount holes.
-// No top counterbore is needed: at h>=4 the post top sits below the splayed
-// Active-Cooler push-pin barbs (~2mm under the PCB), so they never touch it.
-module pcb_standoff(h, boss_d = 8, pilot_d = 2.3) {
+// At h>=4 the post top sits below the splayed Active-Cooler push-pin barbs
+// (~2mm under the PCB), so they never touch it. Optional top counterbore
+// (cbore_d/cbore_depth) recesses a screw head pre-installed under the PCB,
+// e.g. the X1001 kit's M2.5x5 screws driven up into its copper spacers.
+module pcb_standoff(h, boss_d = 8, pilot_d = 2.3, cbore_d = 0, cbore_depth = 0) {
     difference() {
         cylinder(h = h, d = boss_d, $fn = lib_cyl_fn);
         translate([0, 0, -1])
             cylinder(h = h + 2, d = pilot_d, $fn = lib_cyl_fn);
+        if (cbore_d > 0)
+            translate([0, 0, h - cbore_depth])
+                cylinder(h = cbore_depth + 1, d = cbore_d, $fn = lib_cyl_fn);
     }
 }
 

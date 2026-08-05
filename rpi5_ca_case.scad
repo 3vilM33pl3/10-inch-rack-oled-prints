@@ -14,9 +14,17 @@
 // lane. The front margin doubles as the recessed USB device bay.
 //
 // Verified stack (resolves the cooler-vs-HAT conflict): Pi -> Active Cooler on
-// top (13.7mm) -> X1001 on 17mm F/F standoffs above the cooler -> SSD (top ~20
-// above the PCB). Interior headroom is set so the OLED electronics (hanging from
-// the lid) clear the SSD even directly above the HAT.
+// top (13.7mm) -> X1001 on the kit's M2.5x17mm F/F copper spacers above the
+// cooler -> SSD on TOP of the X1001 (top ~24 above the Pi PCB). Interior
+// headroom is set so the OLED electronics (hanging from the lid) clear the SSD
+// even directly above the HAT.
+//
+// X1001 kit hardware (wiki.geekworm.com/X1001): 3x M2.5x17mm spacers (the 4th
+// Pi hole stays empty) + 6x M2.5x5mm screws, 3 driven up through the Pi into
+// the spacers -- their heads nest in the standoff top counterbores. Preferred
+// for this CA box: skip those 3 kit screws and run M2.5x10 machine screws from
+// under the tray, through floor + standoff + Pi, into the copper spacers.
+// That bonds the Pi rigidly to the shell, which the tamper gyro wants.
 //
 // PRINT: tray floor-down (open top up), lid OUTER-face-down (window + top smooth
 // on the bed, pocket walls grow up). No supports; PETG or PLA, 4 perimeters.
@@ -58,8 +66,9 @@ hdmi_cut = [8, 6];          // [X width, Z height] micro-HDMI (generous)
 // Stack heights above the PCB top surface -- MEASURE ME on the real stack
 // ---------------------------------------------------------------------------
 cooler_h = 13.7;            // Active Cooler height above PCB
-hat_standoff = 17;          // Pi -> HAT F/F standoff
-ssd_top_h = 20;             // top of the 2280 SSD above PCB
+hat_standoff = 17;          // X1001 kit M2.5x17mm F/F copper spacer (confirmed)
+ssd_top_h = 24;             // top of the 2280 SSD above PCB: 17 spacer + 1.6 HAT
+                            // PCB + ~2.5 M.2 socket lift + ~2.3 SSD  // MEASURE ME
 usb_conn_h = 16;            // stacked USB-A body height above PCB
 oled_hang = 13;             // how far OLED electronics hang below its glass
 
@@ -76,7 +85,7 @@ front_gap = 8;              // margin in front of the Pi (front bosses + USB bay
 gpio_lane = 26;             // component lane along the GPIO edge (mux + gyro)
 
 standoff_below = 4;         // PCB underside above the floor (clears SD + cooler pins)
-clearance_above_pcb = 33;   // headroom above PCB (clears stack AND lid-hung OLED)
+clearance_above_pcb = 37;   // headroom above PCB (clears stack AND lid-hung OLED)
 
 // derived interior / exterior
 interior_x = rear_gap + pcb_x + front_gap;
@@ -198,10 +207,13 @@ module tray() {
     difference() {
         union() {
             shell([ext_x, ext_y, tray_h], corner_r, wall, floor_th);
-            // Pi standoffs (sunk 0.5 into the floor for a solid weld)
+            // Pi standoffs (sunk 0.5 into the floor for a solid weld).
+            // 2.8 pilot clears an M2.5 through-bolt; the top counterbore takes
+            // the head of an X1001 kit M2.5x5 screw pre-installed under the Pi.
             for (p = pi_hole_xy())
                 translate([p[0], p[1], floor_th - 0.5])
-                    pcb_standoff(standoff_below + 0.5, boss_d = 8, pilot_d = 2.3);
+                    pcb_standoff(standoff_below + 0.5, boss_d = 8, pilot_d = 2.8,
+                                 cbore_d = 5.2, cbore_depth = 2.6);
             // lid screw bosses (heat-set inserts open at the top)
             for (p = boss_xy())
                 translate([p[0], p[1], floor_th - 0.5])
@@ -215,10 +227,15 @@ module tray() {
                                  post_d = 6, post_pilot = 2.6, post_pos = [21 / 2, 16 - 3],
                                  notch_w = 6);
         }
-        // Pi mount-hole screw access up through the floor (optional screws)
-        for (p = pi_hole_xy())
+        // M2.5 clearance up through the floor + a head counterbore in the
+        // underside, so through-bolts from below (into the X1001 spacers) sit
+        // flush and the tray still stands flat. Unused holes are harmless.
+        for (p = pi_hole_xy()) {
             translate([p[0], p[1], -1])
                 cylinder(h = floor_th + standoff_below + 2, d = 3.0, $fn = cyl_fn);
+            translate([p[0], p[1], -1])
+                cylinder(h = 2.2 + 1, d = 5.6, $fn = cyl_fn);
+        }
         front_port_windows();
         front_recess();
         side_port_windows();
@@ -267,8 +284,9 @@ module ghost_pi() {
     color("green", 0.25) {
         translate([pcb_x0, pcb_y0, pcb_top_z - pcb_th]) cube([pcb_x, pcb_y, pcb_th]);
         translate([pcb_x0 + 11, pcb_y0 + 7, pcb_top_z]) cube([63.5, 42.5, cooler_h]);      // cooler
-        translate([pcb_x0 + 10, pcb_y0, pcb_top_z + hat_standoff]) cube([65, 56.5, 3]);    // HAT
-        translate([pcb_x0 + 30, pcb_y0 + 17, pcb_top_z + hat_standoff - 3]) cube([80, 22, 2.3]); // SSD
+        translate([pcb_x0, pcb_y0, pcb_top_z + hat_standoff]) cube([pcb_x, pcb_y, 1.6]);   // X1001
+        translate([pcb_x0 + 2.5, pcb_y0 + 17, pcb_top_z + hat_standoff + 1.6 + 2.5])
+            cube([80, 22, 2.3]);                                                           // SSD on top
     }
 }
 
