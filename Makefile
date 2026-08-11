@@ -27,7 +27,13 @@ build/png/assembly.png: $(SRC) | build/png
 build/stl build/png:
 	mkdir -p $@
 
+# blueprint-style dimensioned drawing of the OLED rack panel (SVG + PNG at root)
+blueprint: oled_display_rack_1u_blueprint.svg
+
+oled_display_rack_1u_blueprint.svg: make_blueprint.py oled_display_rack_1u.scad
+	python3 make_blueprint.py
+
 clean:
 	rm -rf build/stl build/png
 
-.PHONY: all png clean
+.PHONY: all png blueprint clean
