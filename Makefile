@@ -1,39 +1,12 @@
-# Build STLs and preview PNGs for the RPi5 CA enclosure.
-# Modelled on ../CarcassoneRiver/Makefile: a -D render_mode selector drives the
-# single source file into its separate printable parts.
+# Generate the dimensioned drawing for the 10-inch OLED rack panel.
 
-OPENSCAD := /usr/bin/openscad
-SRC      := rpi5_ca_case.scad homelab_lib.scad
+PYTHON ?= python3
 
-PARTS    := tray lid coupon_front coupon_boss
-STLS     := $(PARTS:%=build/stl/rpi5_ca_%.stl)
-PNGS     := $(PARTS:%=build/png/rpi5_ca_%.png) build/png/assembly.png
+all: blueprint
 
-# oblique preview camera (az, el around the part centre)
-CAM_OBL  := --projection=o --imgsize=1000,800 --camera=52,42,22,58,0,28,360
-
-all: $(STLS)
-png: $(PNGS)
-
-build/stl/rpi5_ca_%.stl: $(SRC) | build/stl
-	$(OPENSCAD) -o $@ -D render_mode=\"$*\" rpi5_ca_case.scad
-
-build/png/rpi5_ca_%.png: $(SRC) | build/png
-	$(OPENSCAD) --render -o $@ $(CAM_OBL) -D render_mode=\"$*\" rpi5_ca_case.scad
-
-build/png/assembly.png: $(SRC) | build/png
-	$(OPENSCAD) --render -o $@ $(CAM_OBL) -D render_mode=\"assembly\" rpi5_ca_case.scad
-
-build/stl build/png:
-	mkdir -p $@
-
-# blueprint-style dimensioned drawing of the OLED rack panel (SVG + PNG at root)
 blueprint: oled_display_rack_1u_blueprint.svg
 
 oled_display_rack_1u_blueprint.svg: make_blueprint.py oled_display_rack_1u.scad
-	python3 make_blueprint.py
+	$(PYTHON) make_blueprint.py
 
-clean:
-	rm -rf build/stl build/png
-
-.PHONY: all png blueprint clean
+.PHONY: all blueprint
