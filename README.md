@@ -10,6 +10,12 @@ Every measurement is on this drawing (click for the full-size version):
 
 [![Blueprint](oled_display_rack_1u_blueprint.png)](oled_display_rack_1u_blueprint.png)
 
+## Installed in a rack
+
+The finished panel installed with four OLED status displays.
+
+![Installed 1U OLED rack panel](images/oled-panel-installed.jpeg)
+
 ## Files
 
 - `oled_display_rack_1u.scad` — the parametric OpenSCAD model.
