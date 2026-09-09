@@ -1,8 +1,9 @@
 # 10-Inch Rack OLED Panel
 
-A 3D-printable 1U faceplate for a 10-inch rack. It holds four small OLED
-displays behind neat windows; each module drops into a screwless pocket on the
-back and is held with a strip of tape.
+A 3D-printable 1U faceplate for a 10-inch rack. It holds four small
+[OLED display modules](https://www.amazon.co.uk/dp/B0FKLXL3DY?th=1) behind neat
+windows; each module drops into a screwless pocket on the back and is held with
+a strip of tape.
 
 ![OLED panel](images/oled_panel.png)
 
